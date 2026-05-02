@@ -25,7 +25,7 @@
       "package": "com.denismiso4enko.macrozone"
     },
     "web": {
-      "output": "static",
+      "output": "server",
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [

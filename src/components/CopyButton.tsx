@@ -21,17 +21,17 @@ export default function CopyButton({ meals }: CopyButtonProps) {
       { calories: 0, protein: 0, carbs: 0, fat: 0 }
     );
 
-    const summary = `MacroZone Daily Summary\n\nCalories: ${totals.calories}\nProtein: ${totals.protein}g\nCarbs: ${totals.carbs}g\nFat: ${totals.fat}g\n\nMeals: ${meals.length} logged today`;
+    const summary = `MacroZone: итоги дня\n\nКалории: ${totals.calories}\nБелки: ${totals.protein} г\nУглеводы: ${totals.carbs} г\nЖиры: ${totals.fat} г\n\nПриёмов пищи сегодня: ${meals.length}`;
 
     await Clipboard.setStringAsync(summary);
     await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-    Alert.alert('Copied!', 'Macro summary copied to clipboard.');
+    Alert.alert('Скопировано', 'Итоги по макроэлементам скопированы в буфер обмена.');
   };
 
   return (
     <TouchableOpacity style={styles.button} onPress={handleCopy}>
       <Ionicons name="copy-outline" size={18} color={colors.primary} />
-      <Text style={styles.text}>Copy Summary</Text>
+      <Text style={styles.text}>Скопировать итоги</Text>
     </TouchableOpacity>
   );
 }

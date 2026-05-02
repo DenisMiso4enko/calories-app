@@ -1,9 +1,9 @@
-import { addMeal } from '@/storage/meals';
 import { colors, globalStyles } from '@/styles/global';
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import * as Haptics from 'expo-haptics';
+import { useMeals } from '@/hooks/useMeals';
 
 export default function AddMealScreen() {
   const [name, setName] = useState('');
@@ -12,9 +12,11 @@ export default function AddMealScreen() {
   const [carbs, setCarbs] = useState('');
   const [fat, setFat] = useState('');
 
+  const { addMeal } = useMeals();
+
   const handleAddMeal = async () => {
     if (!name || !calories) {
-      Alert.alert('Error', 'Please enter a meal name and calories.');
+      Alert.alert('Ошибка', 'Введите название приёма пищи и калории.');
       return;
     }
 
@@ -32,7 +34,7 @@ export default function AddMealScreen() {
     setCarbs('');
     setFat('');
 
-    Alert.alert('Success', 'Meal added successfully!');
+    Alert.alert('Готово', 'Приём пищи добавлен.');
     await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
 
     router.push('/');
@@ -40,11 +42,11 @@ export default function AddMealScreen() {
 
   return (
     <View style={globalStyles.container}>
-      <Text style={globalStyles.title}>Add Meal</Text>
+      <Text style={globalStyles.title}>Добавить приём пищи</Text>
 
       <TextInput
         style={styles.input}
-        placeholder="Meal name"
+        placeholder="Название приёма пищи"
         placeholderTextColor={colors.textSecondary}
         value={name}
         onChangeText={setName}
@@ -52,7 +54,7 @@ export default function AddMealScreen() {
 
       <TextInput
         style={styles.input}
-        placeholder="Calories"
+        placeholder="Калории"
         placeholderTextColor={colors.textSecondary}
         keyboardType="numeric"
         value={calories}
@@ -62,7 +64,7 @@ export default function AddMealScreen() {
       <View style={styles.row}>
         <TextInput
           style={[styles.input, styles.rowInput]}
-          placeholder="Protein (g)"
+          placeholder="Белки (г)"
           placeholderTextColor={colors.textSecondary}
           keyboardType="numeric"
           value={protein}
@@ -70,7 +72,7 @@ export default function AddMealScreen() {
         />
         <TextInput
           style={[styles.input, styles.rowInput]}
-          placeholder="Carbs (g)"
+          placeholder="Углеводы (г)"
           placeholderTextColor={colors.textSecondary}
           keyboardType="numeric"
           value={carbs}
@@ -78,7 +80,7 @@ export default function AddMealScreen() {
         />
         <TextInput
           style={[styles.input, styles.rowInput]}
-          placeholder="Fat (g)"
+          placeholder="Жиры (г)"
           placeholderTextColor={colors.textSecondary}
           keyboardType="numeric"
           value={fat}
@@ -87,7 +89,7 @@ export default function AddMealScreen() {
       </View>
 
       <TouchableOpacity style={styles.button} onPress={handleAddMeal}>
-        <Text style={styles.buttonText}>Add Meal</Text>
+        <Text style={styles.buttonText}>Добавить</Text>
       </TouchableOpacity>
     </View>
   );

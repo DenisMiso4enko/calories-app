@@ -35,7 +35,7 @@ export default function ReminderToggle() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Meal Reminders</Text>
+      <Text style={styles.label}>Напоминания о приёмах пищи</Text>
       <Switch
         value={enabled}
         onValueChange={toggle}

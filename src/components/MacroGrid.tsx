@@ -20,27 +20,27 @@ export default function MacroGrid({ meals }: MacroGridProps) {
   return (
     <View style={styles.grid}>
       <MacroCard
-        label='Calories'
+        label='Калории'
         value={`${totals.calories}`}
         goal='2,000'
         color='#ff6b6b'
       />
       <MacroCard
-        label='Protein'
-        value={`${totals.protein}g`}
-        goal='150g'
+        label='Белки'
+        value={`${totals.protein} г`}
+        goal='150 г'
         color='#4ecdc4'
       />
       <MacroCard
-        label='Carbs'
-        value={`${totals.carbs}g`}
-        goal='250g'
+        label='Углеводы'
+        value={`${totals.carbs} г`}
+        goal='250 г'
         color='#ffd93d'
       />
       <MacroCard
-        label='Fat'
-        value={`${totals.fat}g`}
-        goal='65g'
+        label='Жиры'
+        value={`${totals.fat} г`}
+        goal='65 г'
         color='#6bcb77'
       />
     </View>

@@ -20,7 +20,7 @@ export default function ShareButton({ meals }: ShareButtonProps) {
     );
 
     await Share.share({
-      message: `MacroZone Daily Summary\n\nCalories: ${totals.calories}\nProtein: ${totals.protein}g\nCarbs: ${totals.carbs}g\nFat: ${totals.fat}g\n\nMeals: ${meals.length} logged today`,
+      message: `MacroZone: итоги дня\n\nКалории: ${totals.calories}\nБелки: ${totals.protein} г\nУглеводы: ${totals.carbs} г\nЖиры: ${totals.fat} г\n\nПриёмов пищи сегодня: ${meals.length}`,
     });
   };
 

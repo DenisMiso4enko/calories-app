@@ -1,5 +1,6 @@
 import { useSignUp } from '@clerk/clerk-expo';
 import { useRouter } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
 import {
   View,
@@ -17,6 +18,7 @@ export default function SignupScreen() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [code, setCode] = useState('');
   const [pendingVerification, setPendingVerification] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -29,7 +31,6 @@ export default function SignupScreen() {
     try {
       await signUp.create({ emailAddress: email, password });
       await signUp.prepareEmailAddressVerification({ strategy: 'email_code' });
-      console.log({ emailAddress: email, password });
       setPendingVerification(true);
     } catch (e: any) {
       setError(e.errors?.[0]?.message ?? 'Ошибка регистрации');
@@ -87,21 +88,35 @@ export default function SignupScreen() {
         <Text style={styles.subtitle}>Создай аккаунт и начни вести дневник питания</Text>
         <TextInput
           style={styles.input}
-          placeholder="Email"
+          placeholder="Эл. почта"
           placeholderTextColor={colors.textSecondary}
           value={email}
           onChangeText={setEmail}
           autoCapitalize="none"
           keyboardType="email-address"
         />
-        <TextInput
-          style={styles.input}
-          placeholder="Пароль"
-          placeholderTextColor={colors.textSecondary}
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-        />
+        <View style={styles.passwordInputWrapper}>
+          <TextInput
+            style={styles.passwordInput}
+            placeholder="Пароль"
+            placeholderTextColor={colors.textSecondary}
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry={!showPassword}
+          />
+          <TouchableOpacity
+            style={styles.passwordToggle}
+            onPress={() => setShowPassword((current) => !current)}
+            accessibilityRole="button"
+            accessibilityLabel={showPassword ? 'Скрыть пароль' : 'Показать пароль'}
+          >
+            <Ionicons
+              name={showPassword ? 'eye-off-outline' : 'eye-outline'}
+              size={22}
+              color={colors.textSecondary}
+            />
+          </TouchableOpacity>
+        </View>
         {error ? <Text style={styles.error}>{error}</Text> : null}
         <TouchableOpacity style={styles.button} onPress={handleSignUp} disabled={loading}>
           {loading ? (
@@ -149,6 +164,26 @@ const styles = StyleSheet.create({
     padding: 16,
     marginBottom: 12,
     fontSize: 16,
+  },
+  passwordInputWrapper: {
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.surface,
+    borderRadius: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  passwordInput: {
+    flex: 1,
+    color: colors.text,
+    padding: 16,
+    fontSize: 16,
+  },
+  passwordToggle: {
+    alignSelf: 'stretch',
+    justifyContent: 'center',
+    paddingHorizontal: 16,
   },
   button: {
     backgroundColor: colors.primary,

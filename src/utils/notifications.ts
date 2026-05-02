@@ -21,7 +21,7 @@ export const scheduleMealReminders = async () => {
   await Notifications.scheduleNotificationAsync({
     content: {
       title: 'MacroZone',
-      body: "Don't forget to log your lunch!",
+      body: 'Не забудьте записать обед!',
     },
     trigger: {
       type: Notifications.SchedulableTriggerInputTypes.DAILY,
@@ -33,7 +33,7 @@ export const scheduleMealReminders = async () => {
   await Notifications.scheduleNotificationAsync({
     content: {
       title: 'MacroZone',
-      body: 'Time to log your dinner!',
+      body: 'Пора записать ужин!',
     },
     trigger: {
       type: Notifications.SchedulableTriggerInputTypes.DAILY,

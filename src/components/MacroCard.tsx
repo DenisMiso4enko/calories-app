@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 type MacroCardProps = {
   label: string;
@@ -7,14 +7,9 @@ type MacroCardProps = {
   color: string;
 };
 
-export default function MacroCard({
-                                    label,
-                                    value,
-                                    goal,
-                                    color,
-                                  }: MacroCardProps) {
+export default function MacroCard({ label, value, goal, color }: MacroCardProps) {
   return (
-    <View style={[styles.card, {borderLeftColor: color}]}>
+    <View style={[styles.card, { borderLeftColor: color }]}>
       <Text style={styles.label}>{label}</Text>
       <Text style={styles.value}>{value}</Text>
       <Text style={styles.goal}>/ {goal}</Text>

@@ -1,38 +1,26 @@
 import {
+  Image,
   Platform,
   ScrollView,
+  StyleSheet,
   Text,
   TouchableOpacity,
-  StyleSheet,
   View,
-  Image,
 } from 'react-native';
 import { colors, globalStyles } from '@/styles/global';
 import HomeHeader from '@/components/HomeHeader';
 import MacroGrid from '@/components/MacroGrid';
 import RecentMeals from '@/components/RecentMeals';
-import { getMeals, Meal } from '@/storage/meals';
-import { useCallback, useState } from 'react';
-import { useFocusEffect } from 'expo-router';
 import ShareButton from '@/components/ShareButton';
 import CopyButton from '@/components/CopyButton';
 import ReminderToggle from '@/components/ReminderToggle';
 import { useAuth, useUser } from '@clerk/clerk-expo';
+import { useMeals } from '@/hooks/useMeals';
 
 export default function HomeScreen() {
-  const [meals, setMeals] = useState<Meal[]>([]);
-  const loadMeals = async () => {
-    const data = await getMeals();
-    setMeals(data);
-  };
   const { signOut } = useAuth();
   const { user } = useUser();
-
-  useFocusEffect(
-    useCallback(() => {
-      loadMeals();
-    }, [])
-  );
+  const { meals, refetch, deleteMeal } = useMeals();
 
   return (
     <ScrollView style={globalStyles.container}>
@@ -45,7 +33,9 @@ export default function HomeScreen() {
           {user?.imageUrl && <Image source={{ uri: user.imageUrl }} style={styles.avatar} />}
           <View style={styles.userText}>
             <Text style={styles.label}>Текущий профиль</Text>
-            <Text style={styles.name}>{user?.fullName ?? user?.emailAddresses[0].emailAddress}</Text>
+            <Text style={styles.name}>
+              {user?.fullName ?? user?.emailAddresses[0].emailAddress}
+            </Text>
           </View>
         </View>
         <TouchableOpacity onPress={() => signOut()} style={styles.button}>
@@ -56,7 +46,7 @@ export default function HomeScreen() {
       <MacroGrid meals={meals} />
       <CopyButton meals={meals} />
       {Platform.OS !== 'android' && <ReminderToggle />}
-      <RecentMeals meals={meals} onDelete={loadMeals} />
+      <RecentMeals meals={meals} onDelete={refetch} deleteMeal={deleteMeal} />
     </ScrollView>
   );
 }

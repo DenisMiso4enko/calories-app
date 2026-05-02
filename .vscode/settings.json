@@ -3,5 +3,7 @@
     "source.fixAll": "explicit",
     "source.organizeImports": "explicit",
     "source.sortMembers": "explicit"
-  }
+  },
+  "prisma.pinToPrisma6": true,
+  "prisma.schemaPath": "server/prisma/schema.prisma"
 }

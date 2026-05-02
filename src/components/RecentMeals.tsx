@@ -5,14 +5,15 @@ import MealItem from './MealItem';
 type RecentMealsProps = {
   meals: Meal[];
   onDelete: () => void;
+  deleteMeal: (id: string) => Promise<void>;
 };
 
-export default function RecentMeals({ meals, onDelete }: RecentMealsProps) {
+export default function RecentMeals({ meals, onDelete, deleteMeal }: RecentMealsProps) {
   return (
     <View style={{ marginTop: 30 }}>
-      <Text style={styles.sectionTitle}>Recent Meals</Text>
+      <Text style={styles.sectionTitle}>Недавние приёмы пищи</Text>
       {meals.length === 0 ? (
-        <Text style={styles.empty}>No meals logged yet.</Text>
+        <Text style={styles.empty}>Пока нет записей о приёмах пищи.</Text>
       ) : (
         meals
           .slice(0, 5)
@@ -25,6 +26,7 @@ export default function RecentMeals({ meals, onDelete }: RecentMealsProps) {
               protein={meal.protein}
               carbs={meal.carbs}
               fat={meal.fat}
+              deleteMeal={deleteMeal}
               onDelete={onDelete}
             />
           ))

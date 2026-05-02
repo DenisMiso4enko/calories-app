@@ -18,7 +18,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name='index'
         options={{
-          title: 'Home',
+          title: 'Главная',
           tabBarIcon: ({color, size}) => (
             <Ionicons name='home' size={size} color={color}/>
           ),
@@ -27,7 +27,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name='add-meal'
         options={{
-          title: 'Add Meal',
+          title: 'Добавить',
           tabBarIcon: ({color, size}) => (
             <Ionicons name='add-circle' size={size} color={color}/>
           ),
@@ -36,7 +36,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name='meals'
         options={{
-          title: 'All Meals',
+          title: 'Дневник',
           tabBarIcon: ({color, size}) => (
             <Ionicons name='list' size={size} color={color}/>
           ),

@@ -1,5 +1,5 @@
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { deleteMeal } from '@/storage/meals';
+import { Alert, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import * as Haptics from 'expo-haptics';
 
 type MealItemProps = {
   id: string;
@@ -8,9 +8,9 @@ type MealItemProps = {
   protein: number;
   carbs: number;
   fat: number;
-  onDelete: () => void;
+  deleteMeal: (id: string) => Promise<void>;
+  onDelete?: () => void;
 };
-import * as Haptics from 'expo-haptics';
 
 export default function MealItem({
   id,
@@ -19,19 +19,24 @@ export default function MealItem({
   protein,
   carbs,
   fat,
+  deleteMeal,
   onDelete,
 }: MealItemProps) {
   const handleLongPress = () => {
-    Alert.alert('Delete Meal', `Are you sure you want to delete "${name}"?`, [
-      { text: 'Cancel', style: 'cancel' },
+    Alert.alert('Удалить приём пищи', `Вы уверены, что хотите удалить "${name}"?`, [
+      { text: 'Отмена', style: 'cancel' },
       {
-        text: 'Delete',
+        text: 'Удалить',
         style: 'destructive',
         onPress: async () => {
-          await deleteMeal(id);
-          await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-          // обновить список продуктов
-          onDelete();
+          try {
+            await deleteMeal(id);
+            onDelete?.();
+            await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+          } catch (error) {
+            const message = error instanceof Error ? error.message : 'Не удалось удалить приём пищи';
+            Alert.alert('Ошибка удаления', message);
+          }
         },
       },
     ]);
@@ -40,7 +45,7 @@ export default function MealItem({
     <TouchableOpacity style={styles.container} onLongPress={handleLongPress}>
       <Text style={styles.name}>{name}</Text>
       <Text style={styles.macros}>
-        {calories} cal • {protein}g P • {carbs}g C • {fat}g F
+        {calories} ккал • белки {protein} г • углеводы {carbs} г • жиры {fat} г
       </Text>
     </TouchableOpacity>
   );
