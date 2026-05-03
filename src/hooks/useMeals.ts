@@ -16,24 +16,19 @@ export type Meal = {
 export function useMeals() {
   const { userId } = useAuth();
   const [meals, setMeals] = useState<Meal[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
-  const fetchMeals = async () => {
+  const fetchMeals = useCallback(async () => {
     if (!userId) return;
-    setLoading(true);
     try {
       const res = await fetch(`${API_URL}/meals`, {
         headers: { 'x-user-id': userId },
       });
       const data = await res.json();
       setMeals(data);
-    } catch (e) {
-      setError('Не удалось загрузить приёмы пищи');
-    } finally {
-      setLoading(false);
+    } catch {
+      // Keep the current list visible if a background refresh fails.
     }
-  };
+  }, [userId]);
 
   const addMeal = async (meal: Omit<Meal, 'id' | 'createdAt'>) => {
     if (!userId) return;
@@ -48,8 +43,8 @@ export function useMeals() {
       });
       const newMeal = await res.json();
       setMeals((prev) => [newMeal, ...prev]);
-    } catch (e) {
-      setError('Не удалось добавить приём пищи');
+    } catch {
+      // The add screen currently has no error UI, so leave existing state unchanged.
     }
   };
 
@@ -73,7 +68,6 @@ export function useMeals() {
 
       setMeals((prev) => prev.filter((m) => m.id !== id));
     } catch (e) {
-      setError('Не удалось удалить приём пищи');
       throw e;
     }
   };
@@ -93,7 +87,6 @@ export function useMeals() {
 
       setMeals([]);
     } catch (e) {
-      setError('Не удалось удалить все приёмы пищи');
       throw e;
     }
   };
@@ -101,8 +94,8 @@ export function useMeals() {
   useFocusEffect(
     useCallback(() => {
       fetchMeals();
-    }, [userId])
+    }, [fetchMeals])
   );
 
-  return { meals, loading, error, addMeal, refetch: fetchMeals, deleteMeal, deleteAllMeals };
+  return { meals, addMeal, refetch: fetchMeals, deleteMeal, deleteAllMeals };
 }

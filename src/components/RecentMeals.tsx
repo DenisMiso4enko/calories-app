@@ -1,6 +1,8 @@
+import { useMemo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { Meal } from '@/storage/meals';
+import { Meal } from '@/hooks/useMeals';
 import MealItem from './MealItem';
+import { AppColors, useAppTheme } from '@/styles/global';
 
 type RecentMealsProps = {
   meals: Meal[];
@@ -9,6 +11,9 @@ type RecentMealsProps = {
 };
 
 export default function RecentMeals({ meals, onDelete, deleteMeal }: RecentMealsProps) {
+  const { colors } = useAppTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
+
   return (
     <View style={{ marginTop: 30 }}>
       <Text style={styles.sectionTitle}>Недавние приёмы пищи</Text>
@@ -35,15 +40,15 @@ export default function RecentMeals({ meals, onDelete, deleteMeal }: RecentMeals
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#ffffff',
+    color: colors.text,
     marginBottom: 16,
   },
   empty: {
-    color: '#a0a0b0',
+    color: colors.textSecondary,
     fontSize: 14,
   },
 });

@@ -1,4 +1,6 @@
+import { useMemo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { AppColors, useAppTheme } from '@/styles/global';
 
 type MacroCardProps = {
   label: string;
@@ -8,6 +10,9 @@ type MacroCardProps = {
 };
 
 export default function MacroCard({ label, value, goal, color }: MacroCardProps) {
+  const { colors } = useAppTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
+
   return (
     <View style={[styles.card, { borderLeftColor: color }]}>
       <Text style={styles.label}>{label}</Text>
@@ -17,9 +22,9 @@ export default function MacroCard({ label, value, goal, color }: MacroCardProps)
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   card: {
-    backgroundColor: '#16213e',
+    backgroundColor: colors.header,
     borderRadius: 12,
     padding: 16,
     width: '47%',
@@ -27,17 +32,17 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 14,
-    color: '#a0a0b0',
+    color: colors.textSecondary,
   },
   value: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#ffffff',
+    color: colors.text,
     marginTop: 4,
   },
   goal: {
     fontSize: 14,
-    color: '#a0a0b0',
+    color: colors.textSecondary,
     marginTop: 2,
   },
 });

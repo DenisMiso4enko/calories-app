@@ -1,5 +1,8 @@
-import { Alert, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 import * as Haptics from 'expo-haptics';
+import { useMemo } from 'react';
+import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
+import { AppColors, useAppTheme } from '@/styles/global';
 
 type MealItemProps = {
   id: string;
@@ -22,7 +25,10 @@ export default function MealItem({
   deleteMeal,
   onDelete,
 }: MealItemProps) {
-  const handleLongPress = () => {
+  const { colors } = useAppTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
+
+  const handleDeletePress = () => {
     Alert.alert('Удалить приём пищи', `Вы уверены, что хотите удалить "${name}"?`, [
       { text: 'Отмена', style: 'cancel' },
       {
@@ -41,19 +47,28 @@ export default function MealItem({
       },
     ]);
   };
+
+  const renderRightActions = () => (
+    <Pressable style={styles.deleteAction} onPress={handleDeletePress}>
+      <Text style={styles.deleteText}>Удалить</Text>
+    </Pressable>
+  );
+
   return (
-    <TouchableOpacity style={styles.container} onLongPress={handleLongPress}>
-      <Text style={styles.name}>{name}</Text>
-      <Text style={styles.macros}>
-        {calories} ккал • белки {protein} г • углеводы {carbs} г • жиры {fat} г
-      </Text>
-    </TouchableOpacity>
+    <Swipeable renderRightActions={renderRightActions} overshootRight={false}>
+      <View style={styles.container}>
+        <Text style={styles.name}>{name}</Text>
+        <Text style={styles.macros}>
+          {calories} ккал • белки {protein} г • углеводы {carbs} г • жиры {fat} г
+        </Text>
+      </View>
+    </Swipeable>
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   container: {
-    backgroundColor: '#16213e',
+    backgroundColor: colors.header,
     borderRadius: 10,
     padding: 16,
     marginBottom: 10,
@@ -61,11 +76,25 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#ffffff',
+    color: colors.text,
   },
   macros: {
     fontSize: 13,
-    color: '#a0a0b0',
+    color: colors.textSecondary,
     marginTop: 4,
+  },
+  deleteAction: {
+    alignItems: 'center',
+    backgroundColor: colors.alert,
+    borderRadius: 10,
+    justifyContent: 'center',
+    marginBottom: 10,
+    marginLeft: 8,
+    paddingHorizontal: 20,
+  },
+  deleteText: {
+    color: colors.onAlert,
+    fontSize: 14,
+    fontWeight: '600',
   },
 });

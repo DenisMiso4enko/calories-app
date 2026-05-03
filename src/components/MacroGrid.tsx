@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native';
-import { Meal } from '@/storage/meals';
+import { Meal } from '@/hooks/useMeals';
 import MacroCard from './MacroCard';
 
 type MacroGridProps = {

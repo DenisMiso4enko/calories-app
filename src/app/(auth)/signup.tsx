@@ -1,7 +1,7 @@
 import { useSignUp } from '@clerk/clerk-expo';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   View,
   Text,
@@ -10,7 +10,7 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from 'react-native';
-import { colors } from '@/styles/global';
+import { AppColors, useAppTheme } from '@/styles/global';
 
 export default function SignupScreen() {
   const { signUp, setActive, isLoaded } = useSignUp();
@@ -23,6 +23,8 @@ export default function SignupScreen() {
   const [pendingVerification, setPendingVerification] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const { colors } = useAppTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
 
   const handleSignUp = async () => {
     if (!isLoaded) return;
@@ -44,10 +46,8 @@ export default function SignupScreen() {
     setLoading(true);
     try {
       const result = await signUp.attemptEmailAddressVerification({ code });
-      console.log('result:', JSON.stringify(result, null, 2));
       await setActive({ session: result.createdSessionId });
     } catch (e: any) {
-      console.log('error:', JSON.stringify(e, null, 2));
       setError(e.errors?.[0]?.message ?? 'Неверный код');
     } finally {
       setLoading(false);
@@ -71,7 +71,7 @@ export default function SignupScreen() {
           {error ? <Text style={styles.error}>{error}</Text> : null}
           <TouchableOpacity style={styles.button} onPress={handleVerify} disabled={loading}>
             {loading ? (
-              <ActivityIndicator color={colors.background} />
+              <ActivityIndicator color={colors.onPrimary} />
             ) : (
               <Text style={styles.buttonText}>Подтвердить</Text>
             )}
@@ -120,7 +120,7 @@ export default function SignupScreen() {
         {error ? <Text style={styles.error}>{error}</Text> : null}
         <TouchableOpacity style={styles.button} onPress={handleSignUp} disabled={loading}>
           {loading ? (
-            <ActivityIndicator color={colors.background} />
+            <ActivityIndicator color={colors.onPrimary} />
           ) : (
             <Text style={styles.buttonText}>Зарегистрироваться</Text>
           )}
@@ -133,7 +133,7 @@ export default function SignupScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   container: {
     flex: 1,
     padding: 24,
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 12,
   },
-  buttonText: { color: colors.background, fontWeight: '700', fontSize: 16 },
+  buttonText: { color: colors.onPrimary, fontWeight: '700', fontSize: 16 },
   error: { color: colors.alert, marginBottom: 12, textAlign: 'center' },
   link: { textAlign: 'center', color: colors.primary, marginTop: 12, fontWeight: '600' },
 });

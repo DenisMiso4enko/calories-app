@@ -7,7 +7,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { colors, globalStyles } from '@/styles/global';
+import { useMemo } from 'react';
+import { AppColors, useAppTheme } from '@/styles/global';
 import HomeHeader from '@/components/HomeHeader';
 import MacroGrid from '@/components/MacroGrid';
 import RecentMeals from '@/components/RecentMeals';
@@ -21,6 +22,8 @@ export default function HomeScreen() {
   const { signOut } = useAuth();
   const { user } = useUser();
   const { meals, refetch, deleteMeal } = useMeals();
+  const { colors, globalStyles } = useAppTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
 
   return (
     <ScrollView style={globalStyles.container}>
@@ -51,7 +54,7 @@ export default function HomeScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   userCard: {
     backgroundColor: colors.header,
     borderRadius: 16,

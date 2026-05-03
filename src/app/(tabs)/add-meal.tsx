@@ -1,6 +1,6 @@
-import { colors, globalStyles } from '@/styles/global';
+import { AppColors, useAppTheme } from '@/styles/global';
 import { router } from 'expo-router';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import { useMeals } from '@/hooks/useMeals';
@@ -13,6 +13,8 @@ export default function AddMealScreen() {
   const [fat, setFat] = useState('');
 
   const { addMeal } = useMeals();
+  const { colors, globalStyles } = useAppTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
 
   const handleAddMeal = async () => {
     if (!name || !calories) {
@@ -95,7 +97,7 @@ export default function AddMealScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   input: {
     backgroundColor: colors.surface,
     color: colors.text,
@@ -119,7 +121,7 @@ const styles = StyleSheet.create({
     marginTop: 24,
   },
   buttonText: {
-    color: colors.background,
+    color: colors.onPrimary,
     fontSize: 16,
     fontWeight: 'bold',
   },

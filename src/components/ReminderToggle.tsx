@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { StyleSheet, Switch, Text, View } from 'react-native';
-import { colors } from '@/styles/global';
+import { AppColors, useAppTheme } from '@/styles/global';
 import {
   cancelMealReminders,
   requestPermissions,
@@ -12,6 +12,8 @@ const REMINDERS_KEY = 'remindersEnabled';
 
 export default function ReminderToggle() {
   const [enabled, setEnabled] = useState(false);
+  const { colors } = useAppTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
 
   useEffect(() => {
     const load = async () => {
@@ -45,7 +47,7 @@ export default function ReminderToggle() {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',

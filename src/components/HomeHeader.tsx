@@ -1,7 +1,11 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { colors, globalStyles } from '@/styles/global';
+import { useMemo } from 'react';
+import { AppColors, useAppTheme } from '@/styles/global';
 
 export default function HomeHeader() {
+  const { colors, globalStyles } = useAppTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
+
   const currentDate = new Date().toLocaleDateString('ru-RU', {
     weekday: 'long',
     month: 'long',
@@ -15,7 +19,7 @@ export default function HomeHeader() {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   date: {
     fontSize: 14,
     color: colors.textSecondary,

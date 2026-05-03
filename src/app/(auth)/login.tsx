@@ -1,7 +1,7 @@
 import { useSignIn, useOAuth } from '@clerk/clerk-expo';
 import { Href, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   View,
   Text,
@@ -11,7 +11,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
-import { colors } from '@/styles/global';
+import { AppColors, useAppTheme } from '@/styles/global';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -24,6 +24,8 @@ export default function LoginScreen() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const { colors } = useAppTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
 
   const { startOAuthFlow: startGoogleFlow } = useOAuth({ strategy: 'oauth_google' });
   const { startOAuthFlow: startGithubFlow } = useOAuth({ strategy: 'oauth_github' });
@@ -95,7 +97,7 @@ export default function LoginScreen() {
 
         <TouchableOpacity style={styles.button} onPress={handleEmailLogin} disabled={loading}>
           {loading ? (
-            <ActivityIndicator color={colors.background} />
+            <ActivityIndicator color={colors.onPrimary} />
           ) : (
             <Text style={styles.buttonText}>Войти</Text>
           )}
@@ -129,7 +131,7 @@ export default function LoginScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   container: {
     flex: 1,
     padding: 24,
@@ -197,7 +199,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.primary,
   },
-  buttonText: { color: colors.background, fontWeight: '700', fontSize: 16 },
+  buttonText: { color: colors.onPrimary, fontWeight: '700', fontSize: 16 },
   socialButtonText: { color: colors.text, fontWeight: '600', fontSize: 16 },
   error: { color: colors.alert, marginBottom: 12, textAlign: 'center' },
   divider: {

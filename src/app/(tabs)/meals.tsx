@@ -1,10 +1,12 @@
 import MealItem from '@/components/MealItem';
-import { globalStyles } from '@/styles/global';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { useAppTheme } from '@/styles/global';
+import { Ionicons } from '@expo/vector-icons';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useMeals } from '@/hooks/useMeals';
 
 export default function AllMealsScreen() {
   const { meals, deleteMeal, deleteAllMeals, refetch } = useMeals();
+  const { colors, globalStyles } = useAppTheme();
 
   const handleClearAll = async () => {
     await deleteAllMeals();
@@ -14,8 +16,13 @@ export default function AllMealsScreen() {
     <ScrollView style={globalStyles.container}>
       <View style={globalStyles.header}>
         <Text style={globalStyles.title}>Все приёмы пищи</Text>
-        <TouchableOpacity onPress={handleClearAll}>
-          <Text style={styles.clearButton}>Очистить всё</Text>
+        <TouchableOpacity
+          accessibilityLabel="Очистить всё"
+          accessibilityRole="button"
+          onPress={handleClearAll}
+          style={styles.clearButton}
+        >
+          <Ionicons name="trash-outline" size={24} color={colors.alert} />
         </TouchableOpacity>
       </View>
       <View style={{ marginTop: 30 }}>
@@ -41,9 +48,8 @@ export default function AllMealsScreen() {
   );
 }
 
-const styles = {
+const styles = StyleSheet.create({
   clearButton: {
-    color: 'red',
-    fontSize: 16,
+    padding: 8,
   },
-};
+});

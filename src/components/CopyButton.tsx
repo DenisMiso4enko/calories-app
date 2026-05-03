@@ -1,15 +1,19 @@
 import { Ionicons } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
 import * as Haptics from 'expo-haptics';
+import { useMemo } from 'react';
 import { Alert, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { Meal } from '@/storage/meals';
-import { colors } from '@/styles/global';
+import { Meal } from '@/hooks/useMeals';
+import { AppColors, useAppTheme } from '@/styles/global';
 
 type CopyButtonProps = {
   meals: Meal[];
 };
 
 export default function CopyButton({ meals }: CopyButtonProps) {
+  const { colors } = useAppTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
+
   const handleCopy = async () => {
     const totals = meals.reduce(
       (acc, meal) => ({
@@ -36,7 +40,7 @@ export default function CopyButton({ meals }: CopyButtonProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: AppColors) => StyleSheet.create({
   button: {
     flexDirection: 'row',
     alignItems: 'center',
